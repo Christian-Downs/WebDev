@@ -2,7 +2,7 @@
 
 class Connection{
 
-    private PDO $pdo;
+    public PDO $pdo;
     private const CACHE_FILE = __DIR__ . '/tables_exists.cache'; // Define cache file path
 
 
@@ -11,9 +11,7 @@ class Connection{
         if(!file_exists(self::CACHE_FILE)){
             $this->checkTables();
         }
-        
     }
-
 
     private function connect(): bool
     {
@@ -52,13 +50,12 @@ class Connection{
 
     private function createUsersTable(): bool
     {
-
-
         $sql = "CREATE TABLE IF NOT EXISTS users(
             id int(7) not null AUTO_INCREMENT,
             name VARCHAR(100) NOT Null,
-            username nvarchar(100) not null,
+            username varchar(100) not null,
             email VARCHAR(100) not null,
+            password varchar(100) not null,
             Primary key(id)
         )";
 
@@ -89,8 +86,8 @@ class Connection{
         $sql = "CREATE TABLE IF NOT EXISTS business(
             id INT(7) auto_increment NOT NULL,
             name varchar(100) NOT NULL,
-            location nvarchar(100) NOT NULL,
-            description nvarchar(100) NOT NULL,
+            location varchar(100) NOT NULL,
+            description varchar(100) NOT NULL,
             ownerid INT(7) NOT NULL,
             PRIMARY KEY (id),
             FOREIGN KEY (ownerid) REFERENCES yelp.users(id)
@@ -126,7 +123,7 @@ class Connection{
             rating FLOAT(3) NOT NULL,
             businessid int(7) NOT NULL,
             userid int(7) NOT NULL,
-            descriptiono nvarchar(100) NOT NULL,
+            descriptiono varchar(100) NOT NULL,
             PRIMARY KEY (id),
             FOREIGN KEY (businessid) REFERENCES yelp.business(id),
             FOREIGN KEY (userid) REFERENCES yelp.users(id)

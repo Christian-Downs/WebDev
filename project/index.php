@@ -21,7 +21,11 @@
         echo $_SESSION['user'];
     }
 ?>
-    <?php include('header.php')?>
+    <?php include('views/header.php')?>
+    <?php 
+    include('controller/connecter.php');
+    checkTables();
+    ?>
     <h1>Welcome to My Website!</h1>
     <p>This is the home page of my project.</p>
 </body>

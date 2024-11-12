@@ -1,6 +1,6 @@
 <?php
 
-class Connection{
+class Connector{
 
     public PDO $pdo;
     private const CACHE_FILE = __DIR__ . '/tables_exists.cache'; // Define cache file path
@@ -13,9 +13,11 @@ class Connection{
         }
     }
 
+
+
     private function connect(): bool
     {
-        $dsn = 'mysql:host=localhost;dbname=yelp';
+        $dsn = 'mysql:host=localhost;dbname=project';
         $username = 'root';
         $password = 'root';
         try {
@@ -23,7 +25,7 @@ class Connection{
             $this->pdo = $pdo;
             return true;
         } catch (PDOException $e) {
-            die("Connection Error" . $e->getMessage());
+            die("Connector Error" . $e->getMessage());
         }   
     }
 
@@ -41,7 +43,7 @@ class Connection{
     private function checkUsersTables()
     {
         try{
-            $stmt = $this->pdo->query("select 1 from users LIMIT 1");
+            $stmt = $this->pdo->query("select 1 from registration LIMIT 1");
  
         } catch (PDOException $e){
             $this->createUsersTable();
@@ -50,11 +52,11 @@ class Connection{
 
     private function createUsersTable(): bool
     {
-        $sql = "CREATE TABLE IF NOT EXISTS users(
+        $sql = "CREATE TABLE IF NOT EXISTS registration(
             id int(7) not null AUTO_INCREMENT,
             name VARCHAR(100) NOT Null,
-            username varchar(100) not null,
-            email VARCHAR(100) not null,
+            username  varchar(100) not null unique,
+            email VARCHAR(100) not null unique,
             password varchar(100) not null,
             Primary key(id)
         )";
@@ -89,8 +91,9 @@ class Connection{
             location varchar(100) NOT NULL,
             description varchar(100) NOT NULL,
             ownerid INT(7) NOT NULL,
+            photo LONGBLOB,
             PRIMARY KEY (id),
-            FOREIGN KEY (ownerid) REFERENCES yelp.users(id)
+            FOREIGN KEY (ownerid) REFERENCES project.registration(id)
         )";
 
         $stmt = $this->pdo->prepare($sql);
@@ -125,8 +128,8 @@ class Connection{
             userid int(7) NOT NULL,
             descriptiono varchar(100) NOT NULL,
             PRIMARY KEY (id),
-            FOREIGN KEY (businessid) REFERENCES yelp.business(id),
-            FOREIGN KEY (userid) REFERENCES yelp.users(id)
+            FOREIGN KEY (businessid) REFERENCES project.business(id),
+            FOREIGN KEY (userid) REFERENCES project.registration(id)
         )";
 
         $stmt = $this->pdo->prepare($sql);

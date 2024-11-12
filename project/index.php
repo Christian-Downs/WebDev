@@ -7,6 +7,8 @@
 <body>
 
 <?php
+    include('models/Connector.php');
+
     if(session_status() === PHP_SESSION_NONE){
         session_start();
     }
@@ -27,6 +29,7 @@
     checkTables();
     ?>
     <h1>Welcome to My Website!</h1>
+    
     <p>This is the home page of my project.</p>
 </body>
 </html>

@@ -1,14 +1,17 @@
 <?php
-    include("connection.php");
+include("connection.php");
 
 class User{
 
-    private static Connection $connection;
+    private static Connector $Connector;
 
     public string $username;
     public string $name;
     public string $email;
     public int $id;
+
+    public string $photo;
+
     /**
      * To use this pick a way to find a user than fill that in and put blank for all the others
      * @param mixed $username
@@ -17,37 +20,48 @@ class User{
      * @return void
      */
     function __construct($username = '', $id = 0, $email = ""){
-        if (!isset(self::$connection)){
-            self::$connection = new Connection();
+        if (!isset(self::$Connector)){
+            self::$Connector = new Connector();
         }
         error_log($email." ".$username." ".$id);
-        if ($id != 0 && $id != ''){
-            
+        if ($id != 0 && $id !== ''){
+            error_log("SEARCHING: ".$id);
             $this->getUserById($id);
             return;
         }
-        if($username != ''){
+        if($username !== ''){
             $this->getUserByUsername($username);
             return;
         }
-        if($email != ""){
+        if($email !== ""){
             $this->getUserByEmail($email);
         }
     }
 
+
+    function save($password):bool{
+        $sql = "insert into registration(username, name, password, email) values (:username , :name , PASSWORD(:password) , :email)";
+
+        if(self::$Connector->pdo->prepare($sql)->execute(['username'=>$this->username, 'password'=>$password, 'name'=>$this->name, 'email'=>$this->email])){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
     function  updateUsername($username){
-        $sql = "update users set username = :username where id = :id";
-        if(self::$connection->pdo->prepare($sql)->execute(['username'=>$username, 'id'=>$this->id])){
+        $sql = "update registration set username = :username where id = :id";
+        if(self::$Connector->pdo->prepare($sql)->execute(['username'=>$username, 'id'=>$this->id])){
             $this->username = $username;
             return;
         } else {
-            throw new Exception("SQL ERROR USER MODEL UPDATE USERNAME: USERNAME DID NOT UPDATE ERROR");
+            throw new Exception(message: "SQL ERROR USER MODEL UPDATE USERNAME: USERNAME DID NOT UPDATE ERROR");
         }        
     }
 
     function updateName($name){
-        $sql = "update users set name = :name where id = :id";
-        if (self::$connection->pdo->prepare($sql)->execute(['name' => $name, 'id' => $this->id])) {
+        $sql = "update registration set name = :name where id = :id";
+        if (self::$Connector->pdo->prepare($sql)->execute(['name' => $name, 'id' => $this->id])) {
             $this->name = $name;
             return;
         } else {
@@ -55,8 +69,8 @@ class User{
         }   
     } 
     function updateEmail($email){
-        $sql = "update users set email = :email where id = :id";
-        if (self::$connection->pdo->prepare($sql)->execute(['email' => $email, 'id' => $this->id])) {
+        $sql = "update registration set email = :email where id = :id";
+        if (self::$Connector->pdo->prepare($sql)->execute(['email' => $email, 'id' => $this->id])) {
             $this->email = $email;
             return;
         } else {
@@ -66,8 +80,8 @@ class User{
 
     function updatePassword($password){
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "update users set password = :password where id = :id";
-        if (self::$connection->pdo->prepare($sql)->execute(['password' => $hashedPassword, 'id' => $this->id])) {
+        $sql = "update registration set password = :password where id = :id";
+        if (self::$Connector->pdo->prepare($sql)->execute(['password' => $hashedPassword, 'id' => $this->id])) {
             return;
         } else {
             throw new Exception("SQL ERROR USER MODEL UPDATE PASSWORD: PASSWORD DID NOT UPDATE ERROR");
@@ -75,8 +89,8 @@ class User{
     }
 
     function deleteUser(){
-        $sql = "delete from users where id = :id";
-        if (self::$connection->pdo->prepare($sql)->execute(['id' => $this->id])) {
+        $sql = "delete from registration where id = :id";
+        if (self::$Connector->pdo->prepare($sql)->execute(['id' => $this->id])) {
             return;
         } else {
             throw new Exception("SQL ERROR USER MODEL DELETE USER: USER DID NOT DELETE ERROR");
@@ -84,8 +98,8 @@ class User{
     }
 
     function getUserByUsername($username){
-        $sql = "select * from users where username = :username";
-        $stmt = self::$connection->pdo->prepare($sql);
+        $sql = "select * from registration where username = :username";
+        $stmt = self::$Connector->pdo->prepare($sql);
         $stmt->execute(['username' => $username]);
         $user = $stmt->fetch();
         if ($user) {
@@ -101,8 +115,8 @@ class User{
     }
 
     function getUserByEmail($email){
-        $sql = "select * from users where email = :email";
-        $stmt = self::$connection->pdo->prepare($sql);
+        $sql = "select * from registration where email = :email";
+        $stmt = self::$Connector->pdo->prepare($sql);
         $stmt->execute(['email' => $email]);
         $user = $stmt->fetch();
         if ($user) {
@@ -110,15 +124,15 @@ class User{
             $this->name = $user['name'];
             $this->username = $user['username'];
             $this->email = $user['email'];
-            return $user;
+            return $this;
         } else {
             throw new Exception("SQL ERROR USER MODEL GET USER BY EMAIL: USER NOT FOUND ERROR");
         }
     }
 
-    function getUserById($id){
-        $sql = "select * from users where id = :id";
-        $stmt = self::$connection->pdo->prepare($sql);
+    function getUserById($id):User{
+        $sql = "select * from registration where id = :id";
+        $stmt = self::$Connector->pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
         $user = $stmt->fetch();
         if ($user) {
@@ -126,7 +140,7 @@ class User{
             $this->name = $user['name'];
             $this->username = $user['username'];
             $this->email = $user['email'];
-            return $user;
+            return $this;
         } else {
             throw new Exception("SQL ERROR USER MODEL GET USER BY ID: USER NOT FOUND ERROR");
         }

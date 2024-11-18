@@ -13,6 +13,8 @@ class Business {
 
     private $photo;
 
+    private $rating;
+
     public function __construct($name = '', $owner = '', $location = '', $description = '') {
         $this->name = $name;
         $this->owner = new User('',$owner,'');
@@ -98,6 +100,13 @@ class Business {
     public function setPhoto($photo) {
         $this->photo = $photo;
     }
+    public function getRating() {
+        return $this->rating;
+    }
+
+    public function setRating($rating) {
+        $this->rating = $rating;
+    }
 
 
 }
@@ -112,17 +121,32 @@ class BusinessGetter{
     public static function getAllBusinesses() {
         $tempConnector = new Connector();
 
-        $sql = "SELECT * FROM business";
+        $sql = "
+        SELECT
+	b.id,
+	b.name,
+	b.ownerId,
+	b.location,
+	b.description,
+	b.photo,
+	r.rating
+FROM
+	business b
+join (SELECT businessid, round(AVG(rating),1) as rating from review r group by businessid) r on
+	r.businessId = b.id
+        ";
         $stmt = $tempConnector->pdo->prepare($sql);
         $stmt->execute();
         $businesses = $stmt->fetchAll();
         $businessList = [];
         foreach ($businesses as $business) {
             $instance = new Business();
+            error_log(implode(array_keys($business)));
             $instance->setId($business['id']);
             $instance->setName($business['name']);
-            $instance->setOwner((new User())->getUserById($business['ownerid']));
+            $instance->setOwner((new User())->getUserById($business['ownerId']));
             $instance->setLocation($business['location']);
+            $instance->setRating($business['rating']);
             $instance->setDescription($business['description']);
             $instance->setPhoto($business['photo']);
             $businessList[] = $instance;

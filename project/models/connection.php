@@ -126,7 +126,7 @@ class Connector{
             rating FLOAT(3) NOT NULL,
             businessid int(7) NOT NULL,
             userid int(7) NOT NULL,
-            descriptiono varchar(100) NOT NULL,
+            description varchar NOT NULL,
             PRIMARY KEY (id),
             FOREIGN KEY (businessid) REFERENCES project.business(id),
             FOREIGN KEY (userid) REFERENCES project.registration(id)

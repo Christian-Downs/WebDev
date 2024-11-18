@@ -6,7 +6,7 @@ function parsePhoto($fileContent) {
     $base64 = base64_encode($fileContent);
     
     // Create the img HTML tag
-    $imgTag = '<img src="data:image/jpeg;base64,' . $base64 . '" alt="Photo">';
+    $imgTag = '<img src="data:image/jpeg;base64,' . $base64 . '" alt="Photo" class="business-photo" style="width:100%">';
     
     return $imgTag;
 }
@@ -18,17 +18,12 @@ function parsePhoto($fileContent) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Businesses</title>
 </head>
 <body>
-    <header>
-        <h1>All Businesses</h1>
-    </header>
     <main>
-        <p>Welcome to the All Businesses page.</p>
         <!-- Add your content here -->
         <?php  
-            include('models/businessModel.php');
+            include_once('models/businessModel.php');
             $businesses = BusinessGetter::getAllBusinesses();
 
             foreach($businesses as $business){ 

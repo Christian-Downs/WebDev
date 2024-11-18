@@ -17,13 +17,23 @@ class User{
      * @param mixed $username
      * @param mixed $id
      * @param mixed $email
+     * @param mixed $name
      * @return void
      */
-    function __construct($username = '', $id = 0, $email = ""){
+    function __construct($username = '', $id = 0, $email = "", $name = ''){
         if (!isset(self::$Connector)){
             self::$Connector = new Connector();
         }
         error_log($email." ".$username." ".$id);
+
+        if ($id != 0 && $id !== '' && $username !== '' && $email !== "" && $name !== '')    {
+            $this->id = $id;
+            $this->username = $username;
+            $this->email = $email;
+            $this->name = $name;
+            return;
+        }
+
         if ($id != 0 && $id !== ''){
             error_log("SEARCHING: ".$id);
             $this->getUserById($id);
@@ -39,14 +49,34 @@ class User{
     }
 
 
-    function save($password):bool{
-        $sql = "insert into registration(username, name, password, email) values (:username , :name , PASSWORD(:password) , :email)";
-
+    function save($password):User{
+        $sql = "insert into registration(username, name, password, email) values (:username , :name , :password , :email)";
+        error_log($password);
         if(self::$Connector->pdo->prepare($sql)->execute(['username'=>$this->username, 'password'=>$password, 'name'=>$this->name, 'email'=>$this->email])){
-            return true;
+            return self::getUserById(self::$Connector->pdo->lastInsertId());
         } else{
-            return false;
+            throw new Exception("INSERT FAIL");
         }
+    }
+
+    static function login($username, $password):User{
+        if (!isset(self::$Connector)){
+            self::$Connector = new Connector();
+        }
+        $hash = hash("sha256", $password);
+
+        $sql = "select r.id, r.name, r.username, r.email 
+                from registration r 
+                where 
+                    username =:username 
+                    and r.password = :password;";
+
+        $stmt = self::$Connector->pdo->prepare($sql);
+        $stmt->execute(['username'=>$username, 'password'=>$hash]);
+        $user = $stmt->fetch();
+        $user = new User($user['username'],$user['id'],$user['email'],$user['name']);
+
+        return $user;
     }
 
     function  updateUsername($username){

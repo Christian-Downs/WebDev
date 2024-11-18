@@ -8,12 +8,28 @@
 
 <?php
     function checkLogin($username, $password){
-        if(session_status()=== PHP_SESSION_NONE){
 
+        include('models/userModel.php');
+
+        if(session_status()=== PHP_SESSION_NONE){
             session_start();
         }
+        try{
+            $user = User::login($username, $password);
+            if($user !=  null){
+                error_log($user->id);
+                $_SESSION['user'] =serialize($user);
+            }
 
-        $_SESSION['user'] = $username;
+        } catch (Exception $e){
+            error_log("ERROR");
+            $_SESSION['login_error'] = "USER NOT FOUND";
+            header('Location: login.php');
+
+        }
+
+
+        
 
         // IF FAIL THOW EXECPTION
     }
@@ -40,6 +56,14 @@
     <!-- Your login form or content goes here -->
      <h1>LOGIN TIME</h1>
     <form action="login.php" method="POST">
+    <?php
+    
+    if(session_status() !== PHP_SESSION_NONE){
+        if(isset($_SESSION['login_error'])){
+            echo 'User not found';
+        }
+    }
+    ?>
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br><br>
         
@@ -48,5 +72,6 @@
         
         <input type="submit" value="Login">
     </form>
+    <a href="register.php"><button>Register</button></>
 </body>
 </html>

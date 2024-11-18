@@ -11,17 +11,18 @@
     </header>
 <body>
     <header>
-    <div class="w3-bar w3-light-grey w3-border">
+    <div class="w3-bar w3-light-grey">
         <a href="#" class="w3-bar-item w3-button w3-green"><i class="fa fa-home"></i></a>
         <a href="#" class="w3-bar-item w3-button"><i class="fa fa-search"></i></a>
         <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
         <a href="#" class="w3-bar-item w3-button"><i class="fa fa-globe"></i></a>
-        
         <?php // Checks to see if logged in if the user is than display a small image of the user
+                include_once('models/userModel.php');
+
             function loginCheck(){
                 if(session_status()===PHP_SESSION_NONE){
                     error_log("HEADER: NO SESSION");
-                    echo "<a href='login.php' class='w3-bar-item w3-button'><i class='fa fa-sign-in'></i></a>";
+                    echo "<a href='login.php' class='w3-bar-item w3-button w3-right w3-padding-bottom-0 style='padding-bottom:0px''><i class='fa fa-sign-in'></i></a>";
                     return;
                 }
 
@@ -29,18 +30,16 @@
                     //TODO change the image to the image the user provides
                     error_log("HEADER: USER FOUND");
 
-                    echo "<a href='logout.php' class='w3-bar-item w3-button'><i class='material-icons'>person</i></a>";
+                    echo "<a href='logout.php' class='w3-bar-item w3-button w3-right' style='padding-bottom:0px'><i class='material-icons'>person</i></a>";
                     return;
                 } else {
                     error_log("HEADER: NO USER IN SESSION");
 
-                    echo "<a href='#' class='w3-bar-item w3-button'><i class='fa fa-sign-in'></i></a>";
+                    echo "<a href='#' class='w3-bar-item w3-button w3-right w3-padding-bottom-0' style='padding-bottom:0px'><i class='fa fa-sign-in'></i></a>";
                     return;
                 }
 
             }
-            
-
             loginCheck();
         ?>
     </div>

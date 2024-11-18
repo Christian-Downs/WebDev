@@ -1,6 +1,6 @@
 <?php
 
-include('userModel.php');
+include_once('userModel.php');
 
 class Business {
     private $id;

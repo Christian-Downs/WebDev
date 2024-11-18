@@ -1,8 +1,8 @@
 <?php
-include(dirname(__FILE__) . "/../models/Connector.php");
+include_once __DIR__ . "/../models/connection.php";
     
     function checkTables(){
-        $Connector = new Connector();
+        $controller = new Connector();
         
     }
     

@@ -7,7 +7,6 @@
 <body>
 
 <?php
-    include('models/Connector.php');
 
     if(session_status() === PHP_SESSION_NONE){
         session_start();
@@ -18,18 +17,16 @@
 
         header('Location: login.php', true, $permanent ? 301 : 302);
 
-        exit();
     } else {
-        echo $_SESSION['user'];
+        include_once('models/userModel.php');
+        // unserialize($_SESSION['user'])->username;
     }
 ?>
     <?php include('views/header.php')?>
     <?php 
-    include('controller/connecter.php');
+    include_once('controller/connecter.php');
     checkTables();
+    include ('allBusinesses.php')
     ?>
-    <h1>Welcome to My Website!</h1>
-    
-    <p>This is the home page of my project.</p>
 </body>
 </html>

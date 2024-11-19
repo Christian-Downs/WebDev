@@ -38,6 +38,12 @@ function listDirectory($dir) {
 // Call the function with the current directory (.)
 listDirectory('.');
 
+
+
+$quote = "In the end, it's not the years in your life that count.
+It's the life in your years.";
+echo preg_replace("/'s/", "is", $quote);
+
 ?>
 <?php include('footer.php');?>
 

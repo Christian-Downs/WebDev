@@ -118,6 +118,7 @@ class BusinessGetter{
 
     }
 
+
     public static function getAllBusinesses() {
         $tempConnector = new Connector();
 

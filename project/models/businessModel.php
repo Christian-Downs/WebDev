@@ -9,7 +9,7 @@ class Business {
     private $location;
     private $description;
     
-    private static $Connector;
+    private static Connector $Connector;
 
     private $photo;
 
@@ -20,8 +20,9 @@ class Business {
         $this->owner = new User('',$owner,'');
         $this->location = $location;
         $this->description = $description;
-        self::$Connector = new Connector();
-    }
+        if (!isset(self::$Connector)){
+            self::$Connector = new Connector();
+        }    }
 
     public function save() {
         $sql = "INSERT INTO businesses (name, owner, location, description, photo) VALUES (:name, :owner, :location, :description, :photo)";
@@ -36,7 +37,10 @@ class Business {
     }
 
     public static function getBusinessById($id) {
-        $sql = "SELECT b.id, b.name, b.location, b.description FROM businesses b join registation u on b.owenerId = u.id WHERE b.id = :id";
+        if (!isset(self::$Connector)){
+            self::$Connector = new Connector();
+        }
+        $sql = "SELECT b.id, b.name, b.location, b.description, u.id as owner FROM business b join registration u on b.ownerId = u.id WHERE b.id = :id";
         $stmt = self::$Connector->pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
         $business = $stmt->fetch();

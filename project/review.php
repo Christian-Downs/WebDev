@@ -30,7 +30,6 @@
     </style>
 </head>
 <body>
-    <!-- TODO: Add the parsing of the data for reviewing. -->
     <form id="reviewForm<?php echo $business->getId(); ?>">
         <div class="star-rating<?php echo $business->getId(); ?>">
             <input type="radio" id="star5for<?php echo $business->getId(); ?>" name="ratingFor<?php echo $business->getId(); ?>" value="5"><label for="star5for<?php echo $business->getId(); ?>" title="5 stars">&#9733;</label>
@@ -58,8 +57,9 @@
             data.append('review',review)
             data.append('businessId', <?php echo $business->getId() ?>);
             <?php include_once 'models/userModel.php' ?>
-            data.append('userId', <?php echo unserialize($_SESSION['user'])->id; ?>);  // TODO: Figure out a more secure mode for this.
-            fetch('submit_review.php', {
+            data.append('userId', <?php echo unserialize($_SESSION['user'])->id; ?>); 
+
+            fetch('models/reviewModel.php', {
                 method: 'POST',
                 body: data
             })

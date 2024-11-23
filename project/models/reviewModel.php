@@ -1,7 +1,25 @@
 <?php
 include_once 'connection.php';
-include_once 'businesssModel.php';
+include_once 'businessModel.php';
 include_once 'userModel.php';
+
+error_log("HELLO");
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // Handle the POST request
+    $rating = $_POST['review'] ?? '';
+    $businessId = $_POST['businessId'] ?? '';
+    $userId = $_POST['userId'];
+
+    $review = new Review($userId, "", $rating, $businessId); 
+
+    $review->insertReview();
+
+    echo "Review submitted: " . htmlspecialchars($rating);
+} else {
+    echo "No POST data received.";
+}
 
 class Review
 {
@@ -15,9 +33,23 @@ class Review
     private static Connector $conn;
 
 
-    public function __construct()
+    public function __construct($userId = null, $description = null, $rating = null, $businessId = null)
     {
-        self::$conn = new Connector();
+        if (!isset(self::$Connector)){
+            self::$conn = new Connector();
+        }
+        if ($userId !== null) {
+            $this->setUserId($userId);
+        }
+        if ($description !== null) {
+            $this->setDescription($description);
+        }
+        if ($rating !== null) {
+            $this->setRating($rating);
+        }
+        if ($businessId !== null) {
+            $this->setBusinessId($businessId);
+        }
     }
 
     // Getters
@@ -74,7 +106,7 @@ class Review
     // Insert review
     public function insertReview()
     {
-        $query = "INSERT INTO reviews (rating, business_id, user_id, description) VALUES (:rating, :businessId, :userId, :description)";
+        $query = "INSERT INTO review (rating, businessId, userId, description) VALUES (:rating, :businessId, :userId, :description)";
         $stmt = self::$conn->pdo->prepare($query);
 
         $stmt->bindParam(':rating', $this->rating);
@@ -91,7 +123,7 @@ class Review
     // Update review
     public function updateReview($id)
     {
-        $query = "UPDATE reviews SET rating = :rating, business_id = :businessId, user_id = :userId, description = :description WHERE id = :id";
+        $query = "UPDATE review SET rating = :rating, businessId = :businessId, userId = :userId, description = :description WHERE id = :id";
         $stmt = self::$conn->pdo->prepare($query);
 
         $stmt->bindParam(':rating', $this->rating);
@@ -109,7 +141,7 @@ class Review
     // Delete review
     public function deleteReview($id)
     {
-        $query = "DELETE FROM reviews WHERE id = :id";
+        $query = "DELETE FROM review WHERE id = :id";
         $stmt = self::$conn->pdo->prepare($query);
 
         $stmt->bindParam(':id', $id);

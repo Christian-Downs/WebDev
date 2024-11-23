@@ -21,19 +21,18 @@
 
             function loginCheck(){
                 if(session_status()===PHP_SESSION_NONE){
-                    error_log("HEADER: NO SESSION");
+                    // error_log("HEADER: NO SESSION");
                     echo "<a href='login.php' class='w3-bar-item w3-button w3-right w3-padding-bottom-0 style='padding-bottom:0px''><i class='fa fa-sign-in'></i></a>";
                     return;
                 }
 
                 if(isset($_SESSION['user'])){
-                    //TODO change the image to the image the user provides
-                    error_log("HEADER: USER FOUND");
+                    // error_log("HEADER: USER FOUND");
 
                     echo "<a href='logout.php' class='w3-bar-item w3-button w3-right' style='padding-bottom:0px'><i class='material-icons'>person</i></a>";
                     return;
                 } else {
-                    error_log("HEADER: NO USER IN SESSION");
+                    // error_log("HEADER: NO USER IN SESSION");
 
                     echo "<a href='#' class='w3-bar-item w3-button w3-right w3-padding-bottom-0' style='padding-bottom:0px'><i class='fa fa-sign-in'></i></a>";
                     return;

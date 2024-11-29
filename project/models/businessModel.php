@@ -25,14 +25,18 @@ class Business {
         }    }
 
     public function save() {
-        $sql = "INSERT INTO businesses (name, owner, location, description, photo) VALUES (:name, :owner, :location, :description, :photo)";
+        error_log(print_r($this, true));
+        $sql = "INSERT INTO business (name, ownerId, location, description, photo) VALUES (:name, :ownerId, :location, :description, :photo)";
         $stmt = self::$Connector->pdo->prepare($sql);
+        
         $stmt->execute([
             'name' => $this->name,
-            'owner' => $this->owner->id,
+            'ownerId' => $this->owner->id,
             'location' => $this->location,
-            'description' => $this->description
+            'description' => $this->description,
+            'photo' => $this->photo
         ]);
+        
         $this->id = self::$Connector->pdo->lastInsertId();
     }
 
@@ -137,7 +141,7 @@ class BusinessGetter{
 	r.rating
 FROM
 	business b
-join (SELECT businessid, round(AVG(rating),1) as rating from review r group by businessid) r on
+left join (SELECT businessid, round(AVG(rating),1) as rating from review r group by businessid) r on
 	r.businessId = b.id
         ";
         $stmt = $tempConnector->pdo->prepare($sql);
@@ -146,7 +150,7 @@ join (SELECT businessid, round(AVG(rating),1) as rating from review r group by b
         $businessList = [];
         foreach ($businesses as $business) {
             $instance = new Business();
-            // error_log(implode(array_keys($business)));
+            error_log(implode(array_values($business)));
             $instance->setId($business['id']);
             $instance->setName($business['name']);
             $instance->setOwner((new User())->getUserById($business['ownerId']));

@@ -65,12 +65,13 @@
             })
             .then(response => response.text())
             .then(data => {
-                console.log(data);
-                alert('Review submitted successfully!');
+                location.reload();
+                // console.log(data);
+                // alert('Review submitted successfully!');
             })
             .catch(error => {
-                console.error('Error:', error);
-                alert('There was an error submitting your review.');
+                // console.error('Error:', error);
+                // alert('There was an error submitting your review.');
             });
         });
     });

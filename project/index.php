@@ -28,10 +28,10 @@
     checkTables();
     ?>
 
-    <div class="w3-container w3-center">
+
         <?php 
     include ('allBusinesses.php')
     ?>
-    </div>
+
 </body>
 </html>

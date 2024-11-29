@@ -24,7 +24,7 @@ class User{
         if (!isset(self::$Connector)){
             self::$Connector = new Connector();
         }
-        error_log($email." ".$username." ".$id);
+        // error_log($email." ".$username." ".$id);
 
         if ($id != 0 && $id !== '' && $username !== '' && $email !== "" && $name !== '')    {
             $this->id = $id;
@@ -35,7 +35,7 @@ class User{
         }
 
         if ($id != 0 && $id !== ''){
-            error_log("SEARCHING: ".$id);
+            // error_log("SEARCHING: ".$id);
             $this->getUserById($id);
             return;
         }
@@ -51,7 +51,7 @@ class User{
 
     function save($password):User{
         $sql = "insert into registration(username, name, password, email) values (:username , :name , :password , :email)";
-        error_log($password);
+        // error_log($password);
         if(self::$Connector->pdo->prepare($sql)->execute(['username'=>$this->username, 'password'=>$password, 'name'=>$this->name, 'email'=>$this->email])){
             return self::getUserById(self::$Connector->pdo->lastInsertId());
         } else{

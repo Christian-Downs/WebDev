@@ -30,7 +30,7 @@ class Connector{
     }
 
     private function checkTables(){
-        error_log("RAN");
+        // error_log("RAN");
         $this->checkUsersTables();
         $this->checkBusinessTable();
         $this->checkReviewTable();
@@ -43,7 +43,7 @@ class Connector{
     private function checkUsersTables()
     {
         try{
-            $stmt = $this->pdo->query("select 1 from registration LIMIT 1");
+            $stmt = $this->pdo->query("select 1 from registration LIMIT 1")->execute();
  
         } catch (PDOException $e){
             $this->createUsersTable();
@@ -77,7 +77,7 @@ class Connector{
 
     private function checkBusinessTable(){
         try {
-            $stmt = $this->pdo->query("select 1 from business LIMIT 1");
+            $stmt = $this->pdo->query("select 1 from business LIMIT 1")->execute();
         } catch (PDOException $e) {
             $this->createBusinessTable();
         }
@@ -113,7 +113,7 @@ class Connector{
     private function checkReviewTable()
     {
         try {
-            $stmt = $this->pdo->query("select 1 from review LIMIT 1");
+            $stmt = $this->pdo->query("select 1 from review LIMIT 1")->execute();
         } catch (PDOException $e) {
             $this->createReviewTable();
         }

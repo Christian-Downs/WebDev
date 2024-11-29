@@ -146,7 +146,7 @@ join (SELECT businessid, round(AVG(rating),1) as rating from review r group by b
         $businessList = [];
         foreach ($businesses as $business) {
             $instance = new Business();
-            error_log(implode(array_keys($business)));
+            // error_log(implode(array_keys($business)));
             $instance->setId($business['id']);
             $instance->setName($business['name']);
             $instance->setOwner((new User())->getUserById($business['ownerId']));

@@ -20,25 +20,23 @@ function parsePhoto($fileContent) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <main>
         <!-- Add your content here -->
+       
         <?php  
             include_once('models/businessModel.php');
             $businesses = BusinessGetter::getAllBusinesses();
 
             foreach($businesses as $business){ 
+
+                echo '<div class="w3-container w3-middle w3-center w3-margin-top" style="place-items:center">';
                 $name = $business->getName();
                 
                 $photo = parsePhoto($business->getPhoto());
-                echo $name;
                 include('views/businessCard.php');   //Creates business cards using the businesscard view
+                echo "</div>";
             }
 
         ?>
 
-    </main>
-    <footer>
-        <p>&copy; <?php echo date("Y"); ?> All Businesses. All rights reserved.</p>
-    </footer>
 </body>
 </html>

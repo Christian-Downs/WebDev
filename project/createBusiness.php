@@ -46,21 +46,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php include('views/header.php'); ?>
     <div class="w3-container w3-center">
         <h1>Create Business</h1>
-        <form action="createBusiness.php" method="post" enctype="multipart/form-data">
+        <form action="createBusiness.php" method="post" enctype="multipart/form-data" style="place-items:center">
+            <table>
 
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-            <br /><br>
+                <tr>
+                    <td><label for="name">Name:</label></td>
+                    <td colspan="2"><input type="text" id="name" name="name" placeholder="Business Name" required style="width:100%"></td>
+                </tr>
 
-            <label for="location">Location:</label>
-            <input type="text" id="location" name="location" required><br><br>
+                <tr>
+                    <td><label for="location">Location:</label></td>
+                    <td colspan="2"><input type="text" id="location" name="location" placeholder="Business Location" required style="width:100%"></td>
+                </tr>
 
-            <label for="description">Description:</label>
-            <textarea id="description" name="description"></textarea><br><br>
-
-            <label for="photo">Photo:</label>
-            <input type="file" id="photo" name="photo" accept="image/*" required><br><br>
-
+                <tr>
+                    <td><label for="description">Description:</label></td>
+                    <td colspan="2"> <textarea id="description" name="description" placeholder="Description" style="width:100%"></textarea></td>
+                </tr>
+                <tr>
+                    <td><label for="photo">Photo:</label></td>
+                    <td colspan="2"><input type="file" id="photo" name="photo" accept="image/*" required style="width:100%"></td>
+                </tr>
+            </table>
+            <br>
             <input type="submit" value="Create Business">
         </form>
     </div>

@@ -48,7 +48,7 @@
 
 <body>
     <header>
-        <div class="w3-bar w3-light-grey topnav">
+        <div class="w3-bar w3-light-grey topnav w3-top">
             <a href="index.php" class="w3-bar-item w3-button <?php echo (basename($_SERVER['PHP_SELF']) == "index.php") ? 'w3-green' : ''; ?>" style='height:33px'>
                 <i class="fa fa-home"></i>
             </a>

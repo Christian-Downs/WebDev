@@ -2,7 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <title>Welcome Page</title>
+    <title>Zelp</title>
 </head>
 <body>
 
@@ -24,7 +24,9 @@
 ?>
     <?php include('views/header.php')?>
 
-    <div class="w3-container w3-center">
+    <div class="w3-container w3-center w3-margin">
+        <br>
+        <br>
         <h1>Welcome to Zelp</h1>
     </div>
 

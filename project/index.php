@@ -23,6 +23,11 @@
     }
 ?>
     <?php include('views/header.php')?>
+
+    <div class="w3-container w3-center">
+        <h1>Welcome to Zelp</h1>
+    </div>
+
     <?php 
     include_once('controller/connecter.php');
     checkTables();

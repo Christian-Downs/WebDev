@@ -26,7 +26,12 @@
     <?php 
     include_once('controller/connecter.php');
     checkTables();
+    ?>
+
+    <div class="w3-container w3-center">
+        <?php 
     include ('allBusinesses.php')
     ?>
+    </div>
 </body>
 </html>

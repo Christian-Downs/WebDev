@@ -12,10 +12,6 @@
 <body>
     <header>
     <div class="w3-bar w3-light-grey">
-        <a href="#" class="w3-bar-item w3-button w3-green"><i class="fa fa-home"></i></a>
-        <a href="#" class="w3-bar-item w3-button"><i class="fa fa-search"></i></a>
-        <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
-        <a href="#" class="w3-bar-item w3-button"><i class="fa fa-globe"></i></a>
         <?php // Checks to see if logged in if the user is than display a small image of the user
                 include_once('models/userModel.php');
 

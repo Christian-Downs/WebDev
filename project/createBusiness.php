@@ -17,7 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $business->setName($name);
     $business->setLocation($location);
     $business->setDescription($description);
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     $business->setOwner(unserialize($_SESSION['user']));
     $business->setPhoto(base64_encode($photo));
 

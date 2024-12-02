@@ -54,7 +54,9 @@
             </a>
             <?php
             include_once('models/userModel.php');
-            session_start();
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
 
             function loginCheck()
             {

@@ -44,7 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
     <?php include('views/header.php'); ?>
-    <div class="w3-container w3-center">
+    <div class="w3-container w3-center"> <br>
+        <br>
         <h1>Create Business</h1>
         <form action="createBusiness.php" method="post" enctype="multipart/form-data" style="place-items:center">
             <table>

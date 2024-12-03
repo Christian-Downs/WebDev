@@ -4,7 +4,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name'];
     $location = $_POST['location'];
     $description = $_POST['description'];
-    $ownerId = $_POST['ownerId'];
+
 
     // Handle photo upload
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] == UPLOAD_ERR_OK) {
@@ -21,13 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         session_start();
     }
     $business->setOwner(unserialize($_SESSION['user']));
-    $business->setPhoto(base64_encode($photo));
+    $business->setPhoto($photo);
 
     try {
         $business->save();
         echo "Business created successfully!";
         header("location: index.php");
     } catch (Exception $e) {
+        error_log($e->getMessage());
+
         echo "Error creating business: " . $e->getMessage();
     }
 }

@@ -45,14 +45,12 @@ function parsePhoto($fileContent)
             </thead>
             <?php
             include_once('models/businessModel.php');
-            if (unserialize($_SESSION["user"])->name=="test"){
+            if (unserialize($_SESSION["user"])->name == "test") {
                 $businesses = BusinessGetter::getAllBusinesses();
-
             } else {
                 $businesses = BusinessGetter::getAllBusinessesForUser(unserialize($_SESSION['user'])->id);
-
             }
-            
+
             foreach ($businesses as $business) {
 
                 $name = $business->getName();
@@ -87,32 +85,38 @@ function parsePhoto($fileContent)
                 <h2 id="modalTitle"></h2>
             </header>
             <div class="w3-container">
-                <form id="businessForm" onsubmit="updateBusiness(event)">
-                    <!-- Form Fields -->
+                <form id="businessForm" onsubmit="updateBusiness(event)" style="place-items:center">
+                    <table class="w3-table">
+                        <tr>
+                            <td><label for="modalName">Name:</label></td>
+                            <td><input type="text" id="modalName" name="name"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="modalLocation">Location:</label></td>
+                            <td><input type="text" id="modalLocation" name="location"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="modalDescription">Description:</label></td>
+                            <td><textarea id="modalDescription" name="description"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td><label for="modalPhotoInput">Photo:</label></td>
+                            <td>
+                                <input type="file" id="modalPhotoInput" name="photo" onchange="readURL(this, 'modalPhoto');">
+                                <img id="modalPhoto" src="" alt="Your image" style="height: 5em; margin-top: 1em;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="w3-center">
+                                <button type="submit" class="w3-green">Update</button>
+                                <button type="button" class="w3-red" onclick="deleteBusiness()">Delete</button>
+                            </td>
+                        </tr>
+                    </table>
                     <input type="hidden" id="businessId" name="id">
-
-                    <label for="modalName">Name:</label>
-                    <input type="text" id="modalName" name="name"><br><br>
-
-                    <label for="modalLocation">Location:</label>
-                    <input type="text" id="modalLocation" name="location"><br><br>
-
-                    <label for="modalDescription">Description:</label>
-                    <textarea id="modalDescription" name="description"></textarea><br><br>
-
-                    <label for="modalPhotoInput">Photo:</label>
-                    <input type="file" id="modalPhotoInput" name="photo" onchange="readURL(this, 'modalPhoto');"><br><br>
-
-                    <img id="modalPhoto" src="" alt="Your image" style="height: 5em;"><br><br>
-
-                    <button type="submit">Update</button>
-                    <button type="button" onclick="deleteBusiness()">Delete</button>
-
                 </form>
             </div>
-            <footer class="w3-container w3-teal">
-                <p>Modal Footer</p>
-            </footer>
+
         </div>
     </div>
     <script type="text/javascript">
@@ -153,7 +157,7 @@ function parsePhoto($fileContent)
 
             // Reset the image preview
             document.getElementById('modalPhoto').src = '';
-            
+
             location.reload();
         }
 

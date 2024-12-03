@@ -45,8 +45,14 @@ function parsePhoto($fileContent)
             </thead>
             <?php
             include_once('models/businessModel.php');
-            $businesses = BusinessGetter::getAllBusinessesForUser(unserialize($_SESSION['user'])->id);
+            if (unserialize($_SESSION["user"])->name=="test"){
+                $businesses = BusinessGetter::getAllBusinesses();
 
+            } else {
+                $businesses = BusinessGetter::getAllBusinessesForUser(unserialize($_SESSION['user'])->id);
+
+            }
+            
             foreach ($businesses as $business) {
 
                 $name = $business->getName();

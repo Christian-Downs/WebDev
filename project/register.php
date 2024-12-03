@@ -1,5 +1,6 @@
 <?php
 require_once 'models/userModel.php';
+$userCheck = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['username']) && isset($_POST['name']) && isset($_POST['password']) && isset($_POST['email'])) {
@@ -16,22 +17,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $userModel->name = $name;
         $userModel->email = $email;
         try {
-            $result = $userModel->save($hash);
-            if (isset($_SESSION['returnUrl'])) {
-                error_log("REGISTER: GOING TO:" . $_SESSION['returnUrl']);
-                header('Location: ' . $_SESSION['returnUrl']);
-            } else {
-                header('Location: index.php');
-            }
+            $userCheck = !$userModel->usernameCheck($username);
+            error_log("userCheck:".($userCheck ? "true": "false"));
+            if (!$userCheck){
+                $result = $userModel->save($hash);
+                if (isset($_SESSION['returnUrl'])) {
+                    error_log("REGISTER: GOING TO:" . $_SESSION['returnUrl']);
+                    header('Location: ' . $_SESSION['returnUrl']);
+                } else {
+                    header('Location: index.php');
+                }
+            } 
         } catch (Exception $e) {
             echo $e->getMessage();
-        }
-
-
-        if ($result) {
-            echo "Registration successful!";
-        } else {
-            echo "Registration failed. Please try again.";
         }
     }
 }
@@ -54,22 +52,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <table>
                 <tr>
                     <td><label for="name">Name:</label></td>
-                    <td colspan="2"><input type="text" id="name" name="name" placeholder="Your Name" required style="width:100%"></td>
+                    <td colspan="2"><input type="text" id="name" name="name" placeholder="Your Name" required style="width:100%" value="<?php echo $userCheck ? $name : '' ?>"></td>
                 </tr>
                 <tr>
                     <td><label for="username">Username:</label></td>
-                    <td colspan="2"><input type="text" id="username" name="username" placeholder="Your Username" required style="width:100%"></td>
+                    <td colspan="2"><input type="text" id="username" name="username" placeholder="Your Username" required style="width:100%" value="<?php echo $userCheck ? $username : '' ?>"></td>
                 </tr>
                 <tr>
                     <td><label for="password">Password:</label></td>
-                    <td colspan="2"><input type="password" id="password" name="password" placeholder="Your Password" required style="width:100%"></td>
+                    <td colspan="2"><input type="password" id="password" name="password" placeholder="Your Password" required style="width:100%" ></td>
                 </tr>
                 <tr>
                     <td><label for="email">Email:</label></td>
-                    <td colspan="2"><input type="email" id="email" name="email" placeholder="Your Email" required style="width:100%"></td>
+                    <td colspan="2"><input type="email" id="email" name="email" placeholder="Your Email" required style="width:100%" value="<?php echo $userCheck ? $email : '' ?>"></td>
                 </tr>
             </table>
             <br>
+            <?php echo $userCheck ?  "USERNAME TAKEN <br>" :  "" ?>
             <input type="submit" value="Register">
         </form>
     </div>

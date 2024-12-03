@@ -49,6 +49,15 @@ class User{
     }
 
 
+    function usernameCheck($username):bool{
+        $sql = "select count(*) from registration where username = :username";
+        $stmt = self::$Connector->pdo->prepare($sql);
+        $stmt->execute(['username' => $username]);
+        $count = $stmt->fetchColumn();
+        error_log($count);
+        return $count === 0 ? true: false;
+    }
+
     function save($password):User{
         $sql = "insert into registration(username, name, password, email) values (:username , :name , :password , :email)";
         // error_log($password);
